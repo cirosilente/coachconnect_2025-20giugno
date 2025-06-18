@@ -1,0 +1,43 @@
+databases:
+  - name: laravel-mysql
+    databaseName: laravel_db
+    user: laravel_user
+    plan: free
+
+services:
+  - type: web
+    name: laravel-app
+    env: php
+    plan: free
+    buildCommand: |
+      composer install
+      php artisan config:clear
+      php artisan migrate --force
+    startCommand: php artisan serve --host=0.0.0.0 --port=10000
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: mysql
+      - fromDatabase:
+          name: laravel-mysql
+          property: host
+        key: DB_HOST
+      - fromDatabase:
+          name: laravel-mysql
+          property: port
+        key: DB_PORT
+      - fromDatabase:
+          name: laravel-mysql
+          property: database
+        key: DB_DATABASE
+      - fromDatabase:
+          name: laravel-mysql
+          property: user
+        key: DB_USERNAME
+      - fromDatabase:
+          name: laravel-mysql
+          property: password
+        key: DB_PASSWORD
