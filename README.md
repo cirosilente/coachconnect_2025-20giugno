@@ -1,0 +1,1 @@
+# 20giugno2025-infobasic
